@@ -30,6 +30,8 @@ class statistic:
         self.limit = limit if limit else total
         self.data = []
         self.count = 0
+        self.fib = [0,   1,   2,   3,   5,    8,    13,   21,   34,    55,    89,    144,   233,
+                    377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368]
         return
 
     def show(self, tstat = True):
@@ -83,7 +85,7 @@ class statistic:
             if not stat[t]:
                 continue
             accu = sum(stat[t:])
-            print("\t" "%d" "\t" "%s%%" "\t" "(%s%%)" % ((1 << t) & -2, accu * 100 / blk, stat[t] * 100 / blk)) # type, win rate, % of ending
+            print("\t" "%d" "\t" "%s%%" "\t" "(%s%%)" % (self.fib[t], accu * 100 / blk, stat[t] * 100 / blk)) # type, win rate, % of ending
             c += stat[t]
 
         print()

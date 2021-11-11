@@ -14,6 +14,8 @@ class board:
 
     def __init__(self, state = None):
         self.state = state[:] if state is not None else [0] * 16
+        self.fib = [0,   1,   2,   3,   5,    8,    13,   21,   34,    55,    89,    144,   233,
+                    377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368]
         return
 
     def __getitem__(self, pos):
@@ -55,10 +57,10 @@ class board:
         for row in [self.state[r:r+4] for r in range(0, 16, 4)]:
             row, buf = [], [t for t in row if t]
             while buf:
-                if len(buf) >= 2 and buf[0] is buf[1]:
+                if len(buf) >= 2 and (abs(buf[0] - buf[1]) == 1 or (buf[0] == 1 and buf[1] == 1)):
+                    buf[1] = max([buf[0], buf[1]])+1
                     buf = buf[1:]
-                    buf[0] += 1
-                    score += 1 << buf[0]
+                    score += self.fib[buf[0]]
                 row += [buf[0]]
                 buf = buf[1:]
             move += row + [0] * (4 - len(row))
@@ -130,7 +132,7 @@ class board:
     def __str__(self):
         state = '+' + '-' * 24 + '+\n'
         for row in [self.state[r:r + 4] for r in range(0, 16, 4)]:
-            state += ('|' + ''.join('{0:6d}'.format((1 << t) & -2) for t in row) + '|\n')
+            state += ('|' + ''.join('{0:6d}'.format(self.fib[t]) for t in row) + '|\n')
         state += '+' + '-' * 24 + '+'
         return state
 
